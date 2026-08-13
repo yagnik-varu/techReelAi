@@ -1,0 +1,104 @@
+{
+  "name": "research-tavily-v1",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "9cc727be-b27b-4860-98d6-e2be60a3fc42",
+      "name": "When clicking Execute",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "topic",
+              "value": "What is RAG in AI?"
+            },
+            {
+              "name": "depth",
+              "value": "beginner"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1802ebba-c69e-4a6f-9988-cbaf0da0c8f5",
+      "name": "Set Topic Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "topic",
+              "value": "={{$json.topic}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b18b44bb-c67d-472e-8a19-b6dc24523a65",
+      "name": "Format Placeholder Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Purpose\nInitial research workflow placeholder\n\n## Input Contract\n- topic: string\n- depth: string\n\n## Output Contract\n- TBD — added in 1.4",
+        "height": 200,
+        "width": 300,
+        "color": 6
+      },
+      "id": "5865bb4d-6161-46cc-af3b-822eb351c243",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -250
+      ]
+    }
+  ],
+  "connections": {
+    "When clicking Execute": {
+      "main": [
+        [
+          {
+            "node": "Set Topic Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Topic Input": {
+      "main": [
+        [
+          {
+            "node": "Format Placeholder Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {}
+}
