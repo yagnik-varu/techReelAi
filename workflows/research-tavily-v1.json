@@ -69,8 +69,21 @@
     },
     {
       "parameters": {
-        "content": "## Purpose\nInitial research workflow placeholder\n\n## Input Contract\n- topic: string\n- depth: string\n\n## Output Contract\n- TBD — added in 1.4",
-        "height": 200,
+        "jsCode": "let resultsOut = [];\nfor (const item of $input.all()) {\n  const tavilyResponse = item.json;\n  // Fallback to topic from previous node if available\n  let topic = \"Unknown\";\n  try { topic = $('Set Topic Input').first().json.topic; } catch(e) {}\n\n  const results = tavilyResponse.results || [];\n  const answer = tavilyResponse.answer || (results.length > 0 ? results[0].content : \"No summary available.\");\n\n  const sources = results.map(r => ({\n    url: r.url,\n    title: r.title,\n    snippet: r.content\n  }));\n\n  // derive 2-4 short facts from result snippets\n  const key_facts = results.slice(0, 3).map(r => r.content.substring(0, 100) + '...');\n\n  const research = {\n    status: \"completed\",\n    sources: sources,\n    summary: answer,\n    key_facts: key_facts,\n    completed_at: new Date().toISOString()\n  };\n\n  resultsOut.push({\n    json: {\n      topic: topic,\n      research: research\n    }\n  });\n}\nreturn resultsOut;"
+      },
+      "id": "96c3f15c-3bd5-408a-b9c2-55099307d87f",
+      "name": "Format Research Output",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Purpose\nInitial research workflow placeholder\n\n## Input Contract\n- topic: string\n- depth: string\n\n## Output Contract\n```json\n{\n  \"topic\": \"string\",\n  \"research\": {\n    \"status\": \"completed\",\n    \"sources\": [\n      { \"url\": \"string\", \"title\": \"string\", \"snippet\": \"string\" }\n    ],\n    \"summary\": \"string\",\n    \"key_facts\": [\"string\"],\n    \"completed_at\": \"ISO timestamp\"\n  }\n}\n```",
+        "height": 450,
         "width": 300,
         "color": 6
       },
@@ -80,7 +93,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        -250
+        -500
       ]
     },
     {
@@ -117,6 +130,17 @@
         [
           {
             "node": "Search Tavily API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Tavily API": {
+      "main": [
+        [
+          {
+            "node": "Format Research Output",
             "type": "main",
             "index": 0
           }
