@@ -82,9 +82,67 @@
     },
     {
       "parameters": {
-        "content": "## Purpose\nInitial research workflow placeholder\n\n## Input Contract\n- topic: string\n- depth: string\n\n## Output Contract\n```json\n{\n  \"topic\": \"string\",\n  \"research\": {\n    \"status\": \"completed\",\n    \"sources\": [\n      { \"url\": \"string\", \"title\": \"string\", \"snippet\": \"string\" }\n    ],\n    \"summary\": \"string\",\n    \"key_facts\": [\"string\"],\n    \"completed_at\": \"ISO timestamp\"\n  }\n}\n```",
-        "height": 450,
-        "width": 300,
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.research.sources.length >= 3 && $json.research.summary.trim() !== '' }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "validate-quality-node",
+      "name": "Validate Research Quality",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "research.status",
+              "value": "failed"
+            },
+            {
+              "name": "research.quality_issue",
+              "value": "<3 sources OR empty summary>"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "id": "flag-low-quality",
+      "name": "Flag Low Quality Research",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        150
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "output-node",
+      "name": "Output",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Purpose\nInitial research workflow placeholder\n\n## Input Contract\n- topic: string\n- depth: string\n\n## Validation Rule\n- Sources array length >= 3\n- Summary is not empty/whitespace\n(If invalid, status is set to 'failed' and quality_issue is appended).\n\n## Output Contract\n```json\n{\n  \"topic\": \"string\",\n  \"research\": {\n    \"status\": \"completed|failed\",\n    \"sources\": [\n      { \"url\": \"string\", \"title\": \"string\", \"snippet\": \"string\" }\n    ],\n    \"summary\": \"string\",\n    \"key_facts\": [\"string\"],\n    \"completed_at\": \"ISO timestamp\",\n    \"quality_issue\": \"string (optional)\"\n  }\n}\n```",
+        "height": 550,
+        "width": 350,
         "color": 6
       },
       "id": "5865bb4d-6161-46cc-af3b-822eb351c243",
@@ -93,7 +151,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        -500
+        -550
       ]
     },
     {
@@ -141,6 +199,46 @@
         [
           {
             "node": "Format Research Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Research Output": {
+      "main": [
+        [
+          {
+            "node": "Validate Research Quality",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Research Quality": {
+      "main": [
+        [
+          {
+            "node": "Output",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Flag Low Quality Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flag Low Quality Research": {
+      "main": [
+        [
+          {
+            "node": "Output",
             "type": "main",
             "index": 0
           }

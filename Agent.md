@@ -124,6 +124,7 @@ From `learning-philosophy.md` and `implementation-rules.md`, this governs the ag
   tradeoffs, and real-world usage** — the user is learning n8n and AI workflow engineering,
   not outsourcing it.
 - Never hide implementation details behind abstractions the user hasn't learned yet.
+- **UI Bridging:** Whenever you generate raw JSON for a new n8n node, always include a brief explanation of how to build/configure that node visually in the n8n UI so the user can learn the visual equivalent.
 - Always build the smallest working version before optimization, scaling, multi-agent
   systems, or complex automation.
 - Never skip testing.
