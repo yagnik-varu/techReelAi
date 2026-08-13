@@ -39,24 +39,33 @@
     },
     {
       "parameters": {
-        "values": {
-          "string": [
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
             {
-              "name": "topic",
-              "value": "={{$json.topic}}"
+              "name": "Content-Type",
+              "value": "application/json"
             }
           ]
         },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ api_key: $env.TAVILY_API_KEY, query: $json.topic, search_depth: 'basic', max_results: 5, include_answer: true }) }}",
         "options": {}
       },
       "id": "b18b44bb-c67d-472e-8a19-b6dc24523a65",
-      "name": "Format Placeholder Output",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 1,
+      "name": "Search Tavily API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
       "position": [
         440,
         0
-      ]
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -72,6 +81,22 @@
       "position": [
         0,
         -250
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Required Credential\n**TAVILY_API_KEY**\n\n(Must be set in `.env` based on `.env.example`)",
+        "height": 150,
+        "width": 250,
+        "color": 3
+      },
+      "id": "d04dfd8c-bd24-4d8b-b892-d355ef8eb11e",
+      "name": "Sticky Note 2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        440,
+        -200
       ]
     }
   ],
@@ -91,7 +116,7 @@
       "main": [
         [
           {
-            "node": "Format Placeholder Output",
+            "node": "Search Tavily API",
             "type": "main",
             "index": 0
           }
