@@ -1,0 +1,125 @@
+{
+  "name": "topic-input-webhook-v1",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "topic-input",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "e305ffc3-9844-486d-8b01-5264b9b94000",
+      "name": "Receive Topic",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "e305ffc3-9844-486d-8b01-5264b9b94000"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ !!$json.body?.topic && typeof $json.body.topic === 'string' && $json.body.topic.trim() !== '' }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "validate-topic-node",
+      "name": "Validate Topic",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "180a5e84-18d7-4638-b0a8-6f68c37bb184",
+      "name": "Send Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        440,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"error\": \"topic is required and cannot be empty\"\n}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "id": "send-error-node",
+      "name": "Send Validation Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        440,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Purpose\nAccept topics from outside n8n\n\n## Input Contract\n```json\n{\n  \"topic\": \"string\"\n}\n```\n\n## Validation Rule\n- `topic` must exist and not be an empty string.\n- Returns 400 Bad Request on failure.\n\n## Output Contract\nTBD — added in 2.5",
+        "height": 380,
+        "width": 350,
+        "color": 6
+      },
+      "id": "d0e15904-8930-4e3b-a916-2f0851d02c9a",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -400
+      ]
+    }
+  ],
+  "connections": {
+    "Receive Topic": {
+      "main": [
+        [
+          {
+            "node": "Validate Topic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Topic": {
+      "main": [
+        [
+          {
+            "node": "Send Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Validation Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {}
+}

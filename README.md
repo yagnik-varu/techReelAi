@@ -42,3 +42,11 @@ If you don't see the "Pin Data" option, here are two ways to inject this test da
    ]
    ```
 4. Close the popup and run the workflow.
+
+## Webhooks
+
+When working with workflows that contain Webhook triggers, importing the workflow is not enough to make the webhook listen for requests.
+
+You **must** do one of the following before sending a request:
+1. **Test Mode**: Click **"Execute Workflow"** (or "Listen for Test Event") in the n8n UI. While testing, you must use the `webhook-test/` prefix in your URL (e.g., `http://localhost:5678/webhook-test/topic-input`).
+2. **Production Mode**: Toggle the workflow to **"Active"** in the top right corner of the n8n UI. In production, use the standard `webhook/` prefix in your URL (e.g., `http://localhost:5678/webhook/topic-input`).
