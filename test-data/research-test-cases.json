@@ -1,0 +1,15 @@
+{
+  "normal": {
+    "topic": "What is RAG in AI?",
+    "depth": "beginner"
+  },
+  "edge": {
+    "topic": "a",
+    "depth": "beginner"
+  },
+  "failure": {
+    "topic": "",
+    "depth": "beginner",
+    "_comment": "empty topic, should fail validation before even hitting the API"
+  }
+}
