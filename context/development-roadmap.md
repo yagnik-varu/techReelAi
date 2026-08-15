@@ -44,7 +44,7 @@ Each phase has:
 
 ---
 
-## Phase 1 — First Real Workflow
+## Phase 1 — First Real Workflow ✅
 **Goal**: Build the simplest version of ONE pipeline stage.
 
 **Deliverables**:
