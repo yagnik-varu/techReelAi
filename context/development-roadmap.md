@@ -62,7 +62,7 @@ Each phase has:
 
 ---
 
-## Phase 2 — Topic Input System
+## Phase 2 — Topic Input System ✅
 **Goal**: Accept topics from outside n8n.
 
 **Deliverables**:
