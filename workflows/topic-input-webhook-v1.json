@@ -8,13 +8,13 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "e305ffc3-9844-486d-8b01-5264b9b94000",
-      "name": "Receive Topic",
+      "id": "651cd8f8-56d5-4a11-aa23-f9280b3c9cda",
+      "name": "Receive Topic1",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        0,
-        0
+        3584,
+        800
       ],
       "webhookId": "e305ffc3-9844-486d-8b01-5264b9b94000"
     },
@@ -29,14 +29,137 @@
           ]
         }
       },
-      "id": "validate-topic-node",
-      "name": "Validate Topic",
+      "id": "1fe5e304-399d-481a-8c02-9a7d20cd782a",
+      "name": "Validate Topic1",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        220,
-        0
+        3808,
+        800
       ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "id",
+              "value": "=\"reel_\" + $now.format('yyyyMMdd_HHmmss')"
+            },
+            {
+              "name": "topic",
+              "value": "={{ $json.body.topic.trim() }}"
+            },
+            {
+              "name": "status",
+              "value": "draft"
+            },
+            {
+              "name": "created_at",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "37e08fd3-bc3a-4859-9628-49ac67949b79",
+      "name": "Build Reel Record1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        4032,
+        704
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ",
+          "mode": "list",
+          "cachedResultName": "TechReel AI - Reels",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Reels",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.body.topic }}",
+            "topic": "={{ $json.body.depth }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "topic",
+              "displayName": "topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "78e8ca06-c821-4cfe-8603-be9f2af39d48",
+      "name": "Log Reel to Sheet1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        4256,
+        704
+      ],
+      "retryOnFail": false,
+      "notesInFlow": true,
+      "credentials": {
+        "googleApi": {
+          "id": "y4tFic4VKsJDjib0",
+          "name": "Google Service Account account"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "notes": "hello"
     },
     {
       "parameters": {
@@ -46,13 +169,13 @@
           "responseCode": 200
         }
       },
-      "id": "180a5e84-18d7-4638-b0a8-6f68c37bb184",
-      "name": "Send Response",
+      "id": "68acc5ab-c50f-4ae2-bf30-083ed6e4cefe",
+      "name": "Send Response1",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
       "position": [
-        440,
-        -100
+        4880,
+        624
       ]
     },
     {
@@ -63,56 +186,147 @@
           "responseCode": 400
         }
       },
-      "id": "send-error-node",
-      "name": "Send Validation Error",
+      "id": "c6f15ae9-37d7-4bcc-a375-bea285d0a99f",
+      "name": "Send Validation Error1",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
       "position": [
-        440,
-        100
+        4032,
+        896
       ]
     },
     {
       "parameters": {
-        "content": "## Purpose\nAccept topics from outside n8n\n\n## Input Contract\n```json\n{\n  \"topic\": \"string\"\n}\n```\n\n## Validation Rule\n- `topic` must exist and not be an empty string.\n- Returns 400 Bad Request on failure.\n\n## Output Contract\nTBD — added in 2.5",
-        "height": 380,
+        "content": "## Purpose\nAccept topics from outside n8n\n\n## Input Contract\n```json\n{\n  \"topic\": \"string\"\n}\n```\n\n## Validation Rule\n- `topic` must exist and not be an empty string.\n- Returns 400 Bad Request on failure.\n\n## Output Contract\n```json\n{ \n  \"id\": \"string\", \n  \"topic\": \"string\", \n  \"status\": \"draft\", \n  \"created_at\": \"string\"\n}\n```",
+        "height": 450,
         "width": 350,
         "color": 6
       },
-      "id": "d0e15904-8930-4e3b-a916-2f0851d02c9a",
-      "name": "Sticky Note",
+      "id": "c80cc764-123c-40f9-a1d4-4e05cc321ee0",
+      "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        0,
-        -400
+        3584,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "24030259-63bc-4d40-8640-5e1be3160be5",
+              "leftValue": "={{ !!$json.error }}",
+              "rightValue": "={{ !!$json.error }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4544,
+        704
+      ],
+      "id": "36bb5bb2-31a8-4103-bf71-3962f01bf7c1",
+      "name": "Sheet Write Success"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "id": "b36b16f7-90da-41b9-babd-0e655ccd1d5d",
+      "name": "Respose write log fail",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        4864,
+        960
       ]
     }
   ],
+  "pinData": {},
   "connections": {
-    "Receive Topic": {
+    "Receive Topic1": {
       "main": [
         [
           {
-            "node": "Validate Topic",
+            "node": "Validate Topic1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Validate Topic": {
+    "Validate Topic1": {
       "main": [
         [
           {
-            "node": "Send Response",
+            "node": "Build Reel Record1",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Send Validation Error",
+            "node": "Send Validation Error1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Reel Record1": {
+      "main": [
+        [
+          {
+            "node": "Log Reel to Sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Reel to Sheet1": {
+      "main": [
+        [
+          {
+            "node": "Sheet Write Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Write Success": {
+      "main": [
+        [
+          {
+            "node": "Send Response1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respose write log fail",
             "type": "main",
             "index": 0
           }
@@ -120,6 +334,18 @@
       ]
     }
   },
-  "pinData": {},
-  "meta": {}
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "5ed94970-f026-46e8-a0fe-854b0ccc7258",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8b405466fc66ec51d97879ed5723741d1b00e61045ee8aa7f3797a53db34a92d"
+  },
+  "nodeGroups": [],
+  "id": "8p7BlEHV3VHaEEQk",
+  "tags": []
 }
