@@ -50,3 +50,9 @@ When working with workflows that contain Webhook triggers, importing the workflo
 You **must** do one of the following before sending a request:
 1. **Test Mode**: Click **"Execute Workflow"** (or "Listen for Test Event") in the n8n UI. While testing, you must use the `webhook-test/` prefix in your URL (e.g., `http://localhost:5678/webhook-test/topic-input`).
 2. **Production Mode**: Toggle the workflow to **"Active"** in the top right corner of the n8n UI. In production, use the standard `webhook/` prefix in your URL (e.g., `http://localhost:5678/webhook/topic-input`).
+
+## Testing reel-read-v1
+
+When testing the `reel-read-v1` workflow, keep in mind:
+- **Set Reel ID Input**: The `reel_id` provided in the "Set Reel ID Input" node must be copied from an actual `id` value that exists in your "TechReel - Reels" Google Sheet. You can create a new record using the `reel-create-v1` workflow first.
+- **Output Validation**: The final output of the workflow should exactly match the nested shape documented in [docs/architecture/data-model-strategy.md](docs/architecture/data-model-strategy.md).

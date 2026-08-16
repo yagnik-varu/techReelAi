@@ -1,0 +1,143 @@
+{
+  "name": "Reel-Query-V1",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0f674523-b998-4b55-bb59-c2cb11753a75",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0814345c-ccd4-44fa-9623-d486d53bb531",
+              "name": "status",
+              "value": "draft",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "74b901b9-dc13-4679-bea6-2e64cae47d67",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ",
+          "mode": "list",
+          "cachedResultName": "TechReel AI - Reels",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1872401504,
+          "mode": "list",
+          "cachedResultName": "Reels With Full Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ/edit#gid=1872401504"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "status",
+              "lookupValue": "={{ $json.status }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        448,
+        0
+      ],
+      "id": "9ceed6c5-3d34-49e9-8ff4-eb0492a2cfef",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "y4tFic4VKsJDjib0",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => ({ json: JSON.parse(item.json.data) }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        0
+      ],
+      "id": "8474455e-8ef6-4cdf-b76f-ce4cf55a0353",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "39466ba8-f041-4803-b295-108705808884",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8b405466fc66ec51d97879ed5723741d1b00e61045ee8aa7f3797a53db34a92d"
+  },
+  "nodeGroups": [],
+  "id": "pQGz9U7m11SfF5hr",
+  "tags": []
+}

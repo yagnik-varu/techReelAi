@@ -1,0 +1,214 @@
+{
+  "name": "Reel-create-v1",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        0
+      ],
+      "id": "94cde9b4-4005-459a-b865-f533b00360c1",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "02e77982-6494-4005-abb7-b8e245f18494",
+              "name": "topic",
+              "value": "Optimize way to get data from DB.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        32,
+        0
+      ],
+      "id": "2353ecc0-fbce-4fca-a27c-1f56e21daa85",
+      "name": "set taste input"
+    },
+    {
+      "parameters": {
+        "jsCode": "const topic = $json.topic;\nconst now = new Date().toISOString();\nconst id = `reel_${Date.now()}`;\n\nconst reel = {\n id, topic, status: \"draft\",\n created_at: now, updated_at: now,\n research:   { status: \"not_started\", sources: [], summary: \"\", key_facts: [], completed_at: null },\n script:     { status: \"not_started\", hook: \"\", body: \"\", cta: \"\", word_count: 0, estimated_duration_seconds: 0, version: 0, completed_at: null },\n storyboard: { status: \"not_started\", scenes: [], completed_at: null },\n voiceover:  { status: \"not_started\", audio_url: null, duration_seconds: null, provider: null, completed_at: null },\n video:      { status: \"not_started\", video_url: null, thumbnail_url: null, completed_at: null },\n review:     { status: \"not_started\", approved_by: null, feedback: null, approved_at: null }\n};\n\nreturn [{ json: {\n id: reel.id, topic: reel.topic, status: reel.status,\n created_at: reel.created_at, updated_at: reel.updated_at,\n data: JSON.stringify(reel)\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        0
+      ],
+      "id": "01e65c25-b058-4f62-8f5f-0e1698c01ba8",
+      "name": "Build reel object"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ",
+          "mode": "list",
+          "cachedResultName": "TechReel AI - Reels",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1872401504,
+          "mode": "list",
+          "cachedResultName": "Reels With Full Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ/edit#gid=1872401504"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "topic": "={{ $json.topic }}",
+            "status": "={{ $json.status }}",
+            "created_at": "={{ $json.created_at }}",
+            "updated_at": "={{ $json.updated_at }}",
+            "data": "={{ $json.data }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "topic",
+              "displayName": "topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        480,
+        0
+      ],
+      "id": "5c32bc14-bbad-4476-897d-5fd5d8fcd119",
+      "name": "Create Reel Row",
+      "credentials": {
+        "googleApi": {
+          "id": "y4tFic4VKsJDjib0",
+          "name": "Google Service Account account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "set taste input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set taste input": {
+      "main": [
+        [
+          {
+            "node": "Build reel object",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build reel object": {
+      "main": [
+        [
+          {
+            "node": "Create Reel Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "acae1c11-62bd-4674-8aaf-9601252ef495",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8b405466fc66ec51d97879ed5723741d1b00e61045ee8aa7f3797a53db34a92d"
+  },
+  "nodeGroups": [],
+  "id": "KhTdPccSTsV5n02M",
+  "tags": []
+}

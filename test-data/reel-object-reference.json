@@ -1,0 +1,57 @@
+{
+  "id": "reel_20260810_001",
+  "topic": "What is RAG in AI?",
+  "status": "draft",
+  "created_at": "2026-08-10T19:00:00Z",
+  "updated_at": "2026-08-10T19:05:00Z",
+  "research": {
+    "status": "completed",
+    "sources": [
+      {
+        "url": "https://example.com/rag-explained",
+        "title": "RAG Explained",
+        "snippet": "Retrieval Augmented Generation is..."
+      }
+    ],
+    "summary": "RAG combines retrieval with generation...",
+    "key_facts": [
+      "RAG reduces hallucination by grounding responses in real data",
+      "RAG has two phases: retrieval and generation"
+    ],
+    "completed_at": "2026-08-10T19:01:00Z"
+  },
+  "script": {
+    "status": "pending_review",
+    "hook": "Did you know AI can now Google things before answering?",
+    "body": "That's called RAG — Retrieval Augmented Generation...",
+    "cta": "Follow for more AI concepts explained simply.",
+    "word_count": 150,
+    "estimated_duration_seconds": 45,
+    "version": 1,
+    "completed_at": null
+  },
+  "storyboard": {
+    "status": "not_started",
+    "scenes": [],
+    "completed_at": null
+  },
+  "voiceover": {
+    "status": "not_started",
+    "audio_url": null,
+    "duration_seconds": null,
+    "provider": null,
+    "completed_at": null
+  },
+  "video": {
+    "status": "not_started",
+    "video_url": null,
+    "thumbnail_url": null,
+    "completed_at": null
+  },
+  "review": {
+    "status": "not_started",
+    "approved_by": null,
+    "feedback": null,
+    "approved_at": null
+  }
+}

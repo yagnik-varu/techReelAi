@@ -1,0 +1,315 @@
+{
+  "name": "Reel-update-v1",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        80
+      ],
+      "id": "b04c9b50-743d-40c3-9b40-3f2d1fd6e92f",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"reel_id\": \"reel_1786877282835\",\n  \"update\": { \"research\": { \"status\": \"completed\", \"summary\": \"Test summary\" } }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        80
+      ],
+      "id": "53a19ed0-fbc1-47ba-8b56-ef38f2a31623",
+      "name": "Set Update Input"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ",
+          "mode": "list",
+          "cachedResultName": "TechReel AI - Reels",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1872401504,
+          "mode": "list",
+          "cachedResultName": "Reels With Full Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ/edit#gid=1872401504"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "id",
+              "lookupValue": "={{ $json.reel_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        448,
+        0
+      ],
+      "id": "335eef1e-c770-4152-ac9d-782a37b53c63",
+      "name": "Get Reel Row",
+      "credentials": {
+        "googleApi": {
+          "id": "y4tFic4VKsJDjib0",
+          "name": "Google Service Account account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        896,
+        80
+      ],
+      "id": "849577be-6caa-4a2d-a849-237fe01ee0b1",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const row = $input.first().json;\n   const reel = JSON.parse(row.data);\n   return [{ json: reel }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "4939ef08-86b9-4c9a-a674-3a09f6e44251",
+      "name": "Parse Existing Reel"
+    },
+    {
+      "parameters": {
+        "jsCode": "const merged = $input.all()[0].json;\nconst updatePayload = merged.update;\nconsole.log(\"updatePayload\",updatePayload)\n\n// Everything except reel_id/update is the existing reel's own\n// top-level fields, flattened in by the Merge node\nconst existingReel = { ...merged };\ndelete existingReel.reel_id;\ndelete existingReel.update;\n\nconst updatedReel = { ...existingReel };\nfor (const key of Object.keys(updatePayload)) {\n  console.log(\"key\",key)\n if (typeof updatePayload[key] === 'object' && updatePayload[key] !== null && updatedReel[key]) {\n   updatedReel[key] = { ...updatedReel[key], ...updatePayload[key] };\n } else {\n   updatedReel[key] = updatePayload[key];\n   console.log('key',key)\n   console.log('updatedReel[key]',updatedReel[key])\n   console.log(\"updatePayload[key]\",updatePayload[key])\n   \n }\n}\nupdatedReel.updated_at = new Date().toISOString();\n\nreturn [{ json: {\n id: updatedReel.id, topic: updatedReel.topic, status: updatedReel.status,\n created_at: updatedReel.created_at, updated_at: updatedReel.updated_at,\n data: JSON.stringify(updatedReel)\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        80
+      ],
+      "id": "b9c83168-074f-47b1-b3e7-373b0aace0f8",
+      "name": "Deep Merge Reel"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ",
+          "mode": "list",
+          "cachedResultName": "TechReel AI - Reels",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1872401504,
+          "mode": "list",
+          "cachedResultName": "Reels With Full Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zYUF1Ue1rhJV3QrYiq5N2OcDNEtqFh7vWp8Fjnx4UdQ/edit#gid=1872401504"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "topic",
+              "displayName": "topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1344,
+        80
+      ],
+      "id": "20c64478-c76c-4a40-8b67-4ef1556ba272",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "y4tFic4VKsJDjib0",
+          "name": "Google Service Account account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set Update Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Update Input": {
+      "main": [
+        [
+          {
+            "node": "Get Reel Row",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get Reel Row": {
+      "main": [
+        [
+          {
+            "node": "Parse Existing Reel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Existing Reel": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Deep Merge Reel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deep Merge Reel": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "42d8d159-efc9-4c32-8f63-f08dbd85a2fb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8b405466fc66ec51d97879ed5723741d1b00e61045ee8aa7f3797a53db34a92d"
+  },
+  "nodeGroups": [],
+  "id": "SoWJ4gyBXt3kqMRL",
+  "tags": []
+}
