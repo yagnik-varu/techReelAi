@@ -1,0 +1,17 @@
+{
+  "reel_id": "TEST-REEL-001",
+  "topic": "What is RAG in AI?",
+  "research": {
+    "topic": "RAG (Retrieval Augmented Generation)",
+    "one_line_explanation": "RAG is a technique that lets AI search for real information before answering, instead of guessing from memory.",
+    "hook_fact": "ChatGPT sometimes makes up facts — RAG is how engineers are fixing that.",
+    "key_points": [
+      "AI models like ChatGPT only know what they were trained on, which has a cutoff date",
+      "RAG adds a 'search step' before the AI answers — it retrieves real documents first",
+      "This means AI responses are grounded in actual data, dramatically reducing hallucinations"
+    ],
+    "analogy": "It's like an open-book exam vs a closed-book exam — RAG lets the AI look things up instead of relying purely on memory.",
+    "common_misconception": "People think RAG makes AI smarter — it actually just gives AI access to better information.",
+    "technical_accuracy_notes": "RAG has two phases: retrieval (finding relevant documents) and generation (using those documents to form a response). The quality of retrieval directly affects output quality."
+  }
+}
